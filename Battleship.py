@@ -59,6 +59,7 @@ board[fiveHorRow][fiveHorColTwo] = "F"
 board[fiveHorRow][fiveHorColThree] = "F"
 board[fiveHorRow][fiveHorColFour] = "F"
 
+#Hiding the ships
 board[threeHorRow][threeHorColOne] = "O"
 board[threeHorRow][threeHorColTwo] = "O"
 board[threeHorRow][threeHorColThree] = "O"
@@ -70,10 +71,6 @@ board[fiveHorRow][fiveHorColFour] = "O"
 board[threeVerRowOne][threeVerCol] = "O"
 board[threeVerRowTwo][threeVerCol] = "O"
 board[threeVerRowThree][threeVerCol] = "O"
-
-
-ship_row = random_row(board)
-ship_col = random_col(board)
 
 hit = 0
 strike = 0
@@ -87,29 +84,65 @@ for turn in range(20):
   guess_col = guess_col - 1
   print ""
   
-  if ((guess_row == fiveHorRow and guess_col == fiveHorColMid) or (guess_row == fiveHorRow and guess_col == fiveHorColOne) or (guess_row == fiveHorRow and guess_col == fiveHorColTwo) or (guess_row == fiveHorRow and guess_col == fiveHorColThree) or (guess_row == fiveHorRow and guess_col == fiveHorColFour) or (guess_row == threeHorRow and guess_col == threeHorColOne) or (guess_row == threeHorRow and guess_col == threeHorColTwo) or (guess_row == threeHorRow and guess_col == threeHorColThree) or (guess_row == threeVerRowOne and guess_col == threeVerCol) or (guess_row == threeVerRowTwo and guess_col == threeVerCol) or (guess_row == threeVerRowThree and guess_col == threeVerCol)) and (board[guess_row][guess_col] != "H"): 
+  #Checks if user hit any of the ships
+  if ((guess_row == fiveHorRow and guess_col == fiveHorColMid) or (guess_row == fiveHorRow and guess_col == fiveHorColOne) or (guess_row == fiveHorRow and guess_col == fiveHorColTwo) or (guess_row == fiveHorRow and guess_col == fiveHorColThree) or (guess_row == fiveHorRow and guess_col == fiveHorColFour) or (guess_row == threeHorRow and guess_col == threeHorColOne) or (guess_row == threeHorRow and guess_col == threeHorColTwo) or (guess_row == threeHorRow and guess_col == threeHorColThree) or (guess_row == threeVerRowOne and guess_col == threeVerCol) or (guess_row == threeVerRowTwo and guess_col == threeVerCol) or (guess_row == threeVerRowThree and guess_col == threeVerCol)) and (board[guess_row][guess_col] != "H") and (board[guess_row][guess_col] != "D") : 
     print "A hit!"
     hit = hit + 1
     board[guess_row][guess_col] = "H"
     print "You've hit", hit, "cannonballs!"
+    
+    #Checks if user hit all 3 of the small horizontal ship
+    if ((board[threeHorRow][threeHorColOne] == "H") and (board[threeHorRow][threeHorColTwo] == "H") and (board[threeHorRow][threeHorColThree] == "H")):
+      print "You destroyed my small horizontal ship!"
+      board[threeHorRow][threeHorColOne] = "D"
+      board[threeHorRow][threeHorColTwo] = "D"
+      board[threeHorRow][threeHorColThree] = "D"
+    
+    #Checks if user hit all 5 of the large horizontal ship
+    if ((board[fiveHorRow][fiveHorColMid] == "H") and (board[fiveHorRow][fiveHorColOne] == "H") and (board[fiveHorRow][fiveHorColTwo] == "H") and (board[fiveHorRow][fiveHorColThree] == "H") and (board[fiveHorRow][fiveHorColFour] == "H")):
+      print "You destroyed my big ship!"
+      board[fiveHorRow][fiveHorColMid] = "D"
+      board[fiveHorRow][fiveHorColOne] = "D"
+      board[fiveHorRow][fiveHorColTwo] = "D"
+      board[fiveHorRow][fiveHorColThree] = "D"
+      board[fiveHorRow][fiveHorColFour] = "D"
+
+    #Checks if user hit all 3 of the small vertical ship
+    if ((board[threeVerRowOne][threeVerCol] == "H") and(board[threeVerRowTwo][threeVerCol] == "H") and (board[threeVerRowThree][threeVerCol] == "H")):
+      print "You destroyed my small vertical ship!"
+      board[threeVerRowOne][threeVerCol] = "D"
+      board[threeVerRowTwo][threeVerCol] = "D"
+      board[threeVerRowThree][threeVerCol] = "D"
+
+    #Checks if user sunk all ships (3 + 3 + 5 = 11)
     if (hit == 11):
       print "Congratulations, you sunk all my ships!"
       break;
+  
+  #If user misses
   else:
+
+    #Checks if user guessed out of the range of 1-7
     if guess_row not in range(len(board)) or \
       guess_col not in range(len(board)):
       print "Oops, that's not even in the ocean."
       strike += 1
       print "Strike: ", strike, "!"
-    elif board[guess_row][guess_col] == "X" or board[guess_row][guess_col] == "H":
+
+    #Checks if user already guessed that spot
+    elif board[guess_row][guess_col] == "X" or board[guess_row][guess_col] == "H" or board[guess_row][guess_col] == "D":
       print( "You guessed that one already." )
       strike += 1
       print "Strike: ", strike, "!"
+
+    #If user just missed
     else:
       print "You missed my battleship!"
       strike += 1
       print "Strike: ", strike, "!"
       board[guess_row][guess_col] = "X"
+    
+    #Checks if user missed 5 times (Game Over)
     if (strike == 5):
       board[threeHorRow][threeHorColOne] = "S"
       board[threeHorRow][threeHorColTwo] = "S"
