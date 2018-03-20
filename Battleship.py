@@ -1,6 +1,7 @@
 from random import randint
 
 #Creating the board
+
 board = []
 for x in range(0, 7):
   board.append(["O"] * 7)
@@ -58,7 +59,6 @@ board[fiveHorRow][fiveHorColTwo] = "F"
 board[fiveHorRow][fiveHorColThree] = "F"
 board[fiveHorRow][fiveHorColFour] = "F"
 
-#Hiding all the ships
 board[threeHorRow][threeHorColOne] = "O"
 board[threeHorRow][threeHorColTwo] = "O"
 board[threeHorRow][threeHorColThree] = "O"
@@ -71,11 +71,14 @@ board[threeVerRowOne][threeVerCol] = "O"
 board[threeVerRowTwo][threeVerCol] = "O"
 board[threeVerRowThree][threeVerCol] = "O"
 
-#Defining strikes and hits
+
+ship_row = random_row(board)
+ship_col = random_col(board)
+
 hit = 0
 strike = 0
-
 #Game loop begins here
+
 for turn in range(20):
   print "Turn", turn + 1
   guess_row = int(raw_input("Guess Row: "))
@@ -84,26 +87,21 @@ for turn in range(20):
   guess_col = guess_col - 1
   print ""
   
-  #If user hits
-  if (guess_row == fiveHorRow and guess_col == fiveHorColMid) or (guess_row == fiveHorRow and guess_col == fiveHorColOne) or (guess_row == fiveHorRow and guess_col == fiveHorColTwo) or (guess_row == fiveHorRow and guess_col == fiveHorColThree) or (guess_row == fiveHorRow and guess_col == fiveHorColFour) or (guess_row == threeHorRow and guess_col == threeHorColOne) or (guess_row == threeHorRow and guess_col == threeHorColTwo) or (guess_row == threeHorRow and guess_col == threeHorColThree) or (guess_row == threeVerRowOne and guess_col == threeVerCol) or (guess_row == threeVerRowTwo and guess_col == threeVerCol) or (guess_row == threeVerRowThree and guess_col == threeVerCol): 
+  if ((guess_row == fiveHorRow and guess_col == fiveHorColMid) or (guess_row == fiveHorRow and guess_col == fiveHorColOne) or (guess_row == fiveHorRow and guess_col == fiveHorColTwo) or (guess_row == fiveHorRow and guess_col == fiveHorColThree) or (guess_row == fiveHorRow and guess_col == fiveHorColFour) or (guess_row == threeHorRow and guess_col == threeHorColOne) or (guess_row == threeHorRow and guess_col == threeHorColTwo) or (guess_row == threeHorRow and guess_col == threeHorColThree) or (guess_row == threeVerRowOne and guess_col == threeVerCol) or (guess_row == threeVerRowTwo and guess_col == threeVerCol) or (guess_row == threeVerRowThree and guess_col == threeVerCol)) and (board[guess_row][guess_col] != "H"): 
     print "A hit!"
     hit = hit + 1
-    board[guess_row][guess_col] = "X"
+    board[guess_row][guess_col] = "H"
     print "You've hit", hit, "cannonballs!"
-    
-    #If he hits sinks all 3 ships
     if (hit == 11):
       print "Congratulations, you sunk all my ships!"
       break;
-      
-      #If user misses
   else:
     if guess_row not in range(len(board)) or \
       guess_col not in range(len(board)):
       print "Oops, that's not even in the ocean."
       strike += 1
       print "Strike: ", strike, "!"
-    elif board[guess_row][guess_col] == "X":
+    elif board[guess_row][guess_col] == "X" or board[guess_row][guess_col] == "H":
       print( "You guessed that one already." )
       strike += 1
       print "Strike: ", strike, "!"
@@ -112,8 +110,6 @@ for turn in range(20):
       strike += 1
       print "Strike: ", strike, "!"
       board[guess_row][guess_col] = "X"
-      
-      #If user misses 5 times show ships end game
     if (strike == 5):
       board[threeHorRow][threeHorColOne] = "S"
       board[threeHorRow][threeHorColTwo] = "S"
